@@ -380,7 +380,7 @@ const MainDashboardStyle = styled.div`
               }
 
               /* Status colors */
-              .status.in-pending .status-dot {
+              .status.pending .status-dot {
                 background-color: #d0d0d0;
               }
 

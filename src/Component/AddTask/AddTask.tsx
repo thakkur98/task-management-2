@@ -10,7 +10,13 @@ interface AddTaskPopupProps {
   tasksData: any;
 }
 
-const AddTaskPopup: React.FC<AddTaskPopupProps> = ({  tasksData, setShow , updateOrAdd , selectedTask, setTaskdata}) => {
+const AddTaskPopup: React.FC<AddTaskPopupProps> = ({
+  tasksData,
+  setShow,
+  updateOrAdd,
+  selectedTask,
+  setTaskdata,
+}) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("Pending");
@@ -31,84 +37,67 @@ const AddTaskPopup: React.FC<AddTaskPopupProps> = ({  tasksData, setShow , updat
     setTitle("");
     setDescription("");
     setStatus("Pending");
-    setShow(false); 
+    setShow(false);
   };
 
- const handleUpdate = () => {
-  const today = new Date();
-  const formattedDate = today.toISOString().split("T")[0]; 
+  const handleUpdate = () => {
+    const today = new Date();
+    const formattedDate = today.toISOString().split("T")[0];
 
-  const taskData = {
-    title,
-    description,
-    status,
-    date: formattedDate, 
+    const taskData = {
+      title,
+      description,
+      status,
+      date: formattedDate,
+    };
+
+    if (updateOrAdd === "Edit") {
+      let newTasksData = { ...tasksData };
+      ["inPending", "inProgress", "completed"].forEach((arrName) => {
+        newTasksData[arrName] = newTasksData[arrName].filter(
+          (task: any) => task.id !== selectedTask.id
+        );
+      });
+      const updatedTask = { ...selectedTask, title, description, status };
+      switch (status) {
+        case "Pending":
+          newTasksData.inPending.push(updatedTask);
+          break;
+        case "In Progress":
+          newTasksData.inProgress.push(updatedTask);
+          break;
+        case "Completed":
+          newTasksData.completed.push(updatedTask);
+          break;
+      }
+
+      setTaskdata(newTasksData);
+    } else {
+      // Add mode (as before)
+      switch (status) {
+        case "Pending":
+          setTaskdata({
+            ...tasksData,
+            inPending: [...tasksData.inPending, taskData],
+          });
+          break;
+        case "In Progress":
+          setTaskdata({
+            ...tasksData,
+            inProgress: [...tasksData.inProgress, taskData],
+          });
+          break;
+        case "Completed":
+          setTaskdata({
+            ...tasksData,
+            completed: [...tasksData.completed, taskData],
+          });
+          break;
+      }
+    }
+
+    handleCancel();
   };
-
-  if(updateOrAdd === "Edit") {
-    let newTasksData = { ...tasksData };   
-    
-    switch(status) {
-    case "Pending":
-      newTasksData.inPending.forEach((task: any) =>{
-        if(task.id === selectedTask.id ){
-          task.title = title;
-          task.description = description;
-          task.status = status;
-        }
-        return task;
-    })
-      break;
-    case "In Progress":
-      newTasksData.inProgress.forEach((task: any) =>{
-        if(task.id === selectedTask.id ){
-          task.title = title;
-          task.description = description;
-          task.status = status;
-        }
-        return task;
-    })
-      break;
-    case "Completed":
-      newTasksData.completed.forEach((task: any) =>{
-        if(task.id === selectedTask.id ){
-          task.title = title;
-          task.description = description;
-          task.status = status;
-        }
-        return task;
-    })
-      break;
-  }
-
-  setTaskdata(newTasksData);
-} else {
-  // Add mode (as before)
-  switch(status) {
-    case "Pending":
-      setTaskdata({
-        ...tasksData,
-        inPending: [...tasksData.inPending, taskData],
-      });
-      break;
-    case "In Progress":
-      setTaskdata({
-        ...tasksData,
-        inProgress: [...tasksData.inProgress, taskData],
-      });
-      break;
-    case "Completed":
-      setTaskdata({
-        ...tasksData,
-        completed: [...tasksData.completed, taskData],
-      });
-      break;
-  }
-}
-
-
-  handleCancel();
-};
 
   return (
     <Overlay>
@@ -119,7 +108,6 @@ const AddTaskPopup: React.FC<AddTaskPopupProps> = ({  tasksData, setShow , updat
 
         <div className="form">
           <div className="form-group">
-           
             <input
               type="text"
               value={title}
@@ -129,7 +117,6 @@ const AddTaskPopup: React.FC<AddTaskPopupProps> = ({  tasksData, setShow , updat
           </div>
 
           <div className="form-group">
-            
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -138,7 +125,6 @@ const AddTaskPopup: React.FC<AddTaskPopupProps> = ({  tasksData, setShow , updat
           </div>
 
           <div className="form-group">
-           
             <select value={status} onChange={(e) => setStatus(e.target.value)}>
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
@@ -151,8 +137,8 @@ const AddTaskPopup: React.FC<AddTaskPopupProps> = ({  tasksData, setShow , updat
               Cancel
             </button>
             <button className="update" onClick={handleUpdate}>
-            {updateOrAdd === "Edit" ? "Update" : "Add"}
-          </button>
+              {updateOrAdd === "Edit" ? "Update" : "Add"}
+            </button>
           </div>
         </div>
       </PopupContent>
@@ -196,8 +182,8 @@ const PopupContent = styled.div`
       color: #fff;
     }
   }
-  .form{
-      margin : 10px 20px;
+  .form {
+    margin: 10px 20px;
   }
 
   .form .form-group {
@@ -242,17 +228,13 @@ const PopupContent = styled.div`
 
     .cancel {
       background: #fff;
-      border: 1px solid #034EA2;
-      color: #034EA2;
-
-    
+      border: 1px solid #034ea2;
+      color: #034ea2;
     }
 
     .update {
-      background: #034EA2;
+      background: #034ea2;
       color: #fff;
-
-     
     }
   }
 `;
