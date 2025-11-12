@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import styled from "styled-components";
 import Header from "../Component/Header/Header";
-import AddTask from "../Component/AddTask/AddTask";
 import AddTaskPopup from "../Component/AddTask/AddTask";
 
 const MainDashboard = () => {
@@ -152,10 +151,12 @@ const MainDashboard = () => {
                             <img
                               src="/images/Pencil.png"
                               onClick={() => handleEdit(task)}
+                              alt="edit"
                             />
                             <img
                               src="/images/Trash.png"
                               onClick={() => handleDelete(task)}
+                              alt="delete"
                             />
                           </span>
                         </div>
@@ -203,10 +204,12 @@ const MainDashboard = () => {
                             <img
                               src="/images/Pencil.png"
                               onClick={() => handleEdit(task)}
+                              alt="edit"
                             />
                             <img
                               src="/images/Trash.png"
                               onClick={() => handleDelete(task)}
+                              alt="delete"
                             />
                           </span>
                         </div>
@@ -254,10 +257,12 @@ const MainDashboard = () => {
                             <img
                               src="/images/Pencil.png"
                               onClick={() => handleEdit(task)}
+                              alt="edit"
                             />
                             <img
                               src="/images/Trash.png"
                               onClick={() => handleDelete(task)}
+                              alt="delete"
                             />
                           </span>
                         </div>
